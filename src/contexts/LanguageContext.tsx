@@ -271,3 +271,67 @@ export function languageInstruction(lang: Lang): string {
   };
   return map[lang];
 }
+
+export type SamplePrompt = {
+  category:
+    | "sexism"
+    | "racism"
+    | "homophobia"
+    | "xenophobia"
+    | "cyberbullying"
+    | "conspiracy"
+    | "harassment"
+    | "factcheck"
+    | "empathy";
+  icon: string;
+  labelKey?: string; // optional translation key for short label
+  text: string;
+};
+
+// Pool of rotating sample prompts covering all hate categories from the system prompt
+export const samplePrompts: Record<Lang, SamplePrompt[]> = {
+  en: [
+    { category: "xenophobia", icon: "🌍", text: "These immigrants are taking all the jobs, they should leave!" },
+    { category: "sexism", icon: "♀️", text: "Women just aren't cut out for leadership roles, it's biology." },
+    { category: "racism", icon: "✊🏽", text: "People from that country are all lazy and untrustworthy." },
+    { category: "homophobia", icon: "🏳️‍🌈", text: "Same-sex couples shouldn't be allowed to raise children." },
+    { category: "cyberbullying", icon: "💬", text: "Nobody at school likes you, just delete your account already." },
+    { category: "harassment", icon: "🛡️", text: "I keep getting nasty DMs from a stranger — what should I do?" },
+    { category: "conspiracy", icon: "🕵️", text: "Is it true that a secret elite controls all European media?" },
+    { category: "factcheck", icon: "🔍", text: "Is it true that immigrants increase crime rates in Europe?" },
+    { category: "empathy", icon: "💗", text: "Help me understand how hateful messages affect people online." },
+  ],
+  fr: [
+    { category: "xenophobia", icon: "🌍", text: "Ces immigrés prennent tous les emplois, ils devraient partir !" },
+    { category: "sexism", icon: "♀️", text: "Les femmes ne sont pas faites pour diriger, c'est biologique." },
+    { category: "racism", icon: "✊🏽", text: "Les gens de ce pays sont tous paresseux et malhonnêtes." },
+    { category: "homophobia", icon: "🏳️‍🌈", text: "Les couples de même sexe ne devraient pas pouvoir élever des enfants." },
+    { category: "cyberbullying", icon: "💬", text: "Personne ne t'aime à l'école, supprime ton compte." },
+    { category: "harassment", icon: "🛡️", text: "Un inconnu m'envoie des messages méchants en privé, que faire ?" },
+    { category: "conspiracy", icon: "🕵️", text: "Est-il vrai qu'une élite secrète contrôle tous les médias européens ?" },
+    { category: "factcheck", icon: "🔍", text: "Est-il vrai que les immigrés augmentent la criminalité en Europe ?" },
+    { category: "empathy", icon: "💗", text: "Aide-moi à comprendre comment les messages haineux affectent les gens en ligne." },
+  ],
+  it: [
+    { category: "xenophobia", icon: "🌍", text: "Questi immigrati ci stanno rubando tutti i lavori, dovrebbero andarsene!" },
+    { category: "sexism", icon: "♀️", text: "Le donne non sono adatte ai ruoli di comando, è biologia." },
+    { category: "racism", icon: "✊🏽", text: "Le persone di quel paese sono tutte pigre e inaffidabili." },
+    { category: "homophobia", icon: "🏳️‍🌈", text: "Le coppie dello stesso sesso non dovrebbero crescere figli." },
+    { category: "cyberbullying", icon: "💬", text: "A scuola nessuno ti sopporta, cancella il tuo account." },
+    { category: "harassment", icon: "🛡️", text: "Uno sconosciuto mi manda messaggi cattivi in privato, cosa faccio?" },
+    { category: "conspiracy", icon: "🕵️", text: "È vero che un'élite segreta controlla tutti i media europei?" },
+    { category: "factcheck", icon: "🔍", text: "È vero che gli immigrati aumentano i tassi di criminalità in Europa?" },
+    { category: "empathy", icon: "💗", text: "Aiutami a capire come i messaggi d'odio colpiscono le persone online." },
+  ],
+  ar: [
+    { category: "xenophobia", icon: "🌍", text: "هؤلاء المهاجرون يستولون على كل الوظائف، يجب أن يرحلوا!" },
+    { category: "sexism", icon: "♀️", text: "النساء لسن مؤهلات لمناصب القيادة، إنها مسألة بيولوجية." },
+    { category: "racism", icon: "✊🏽", text: "كل الناس من تلك الدولة كسالى وغير جديرين بالثقة." },
+    { category: "homophobia", icon: "🏳️‍🌈", text: "لا ينبغي السماح للأزواج من نفس الجنس بتربية الأطفال." },
+    { category: "cyberbullying", icon: "💬", text: "لا أحد في المدرسة يحبك، احذف حسابك فحسب." },
+    { category: "harassment", icon: "🛡️", text: "يصلني سيل من الرسائل المسيئة من شخص مجهول، ماذا أفعل؟" },
+    { category: "conspiracy", icon: "🕵️", text: "هل صحيح أن نخبة سرية تتحكم بكل وسائل الإعلام الأوروبية؟" },
+    { category: "factcheck", icon: "🔍", text: "هل صحيح أن المهاجرين يزيدون من معدلات الجريمة في أوروبا؟" },
+    { category: "empathy", icon: "💗", text: "ساعدني على فهم كيف تؤثر رسائل الكراهية على الناس عبر الإنترنت." },
+  ],
+};
