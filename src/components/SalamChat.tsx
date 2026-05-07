@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-import { Send, Image, Sparkles, Mic, Square, Loader2, Shuffle } from "lucide-react";
+import { Send, Image, Mic, Square, Loader2, Shuffle } from "lucide-react";
 import salamAvatar from "@/assets/salam-avatar.png";
 import { Button } from "@/components/ui/button";
 import { SalamHeader } from "@/components/SalamHeader";
@@ -279,16 +279,15 @@ export default function SalamChat() {
                 {t("welcome.desc")}
               </p>
               <div className="flex flex-col items-center gap-3 mt-6 w-full max-w-lg">
-                <div className="flex flex-wrap justify-center gap-2 w-full">
+                <div className="flex flex-col gap-2 w-full">
                   {suggestions.map((s, i) => (
                     <button
                       key={`${s.category}-${i}-${sampleSeed}`}
                       onClick={() => setInput(s.text)}
                       title={s.text}
-                      className="px-3 py-2 glass neon-border rounded-xl text-xs text-foreground/80 hover:text-primary hover:border-primary/50 transition-all duration-300 max-w-[18rem] truncate animate-fade-scale"
+                      className="px-4 py-2.5 glass neon-border rounded-xl text-xs sm:text-sm text-foreground/80 hover:text-primary hover:border-primary/50 transition-all duration-300 text-left animate-fade-scale"
                     >
-                      <span className="mr-1.5">{s.icon}</span>
-                      <span className="align-middle">{s.text}</span>
+                      {s.text}
                     </button>
                   ))}
                 </div>
@@ -298,7 +297,7 @@ export default function SalamChat() {
                   aria-label="Shuffle suggestions"
                 >
                   <Shuffle className="w-3 h-3" />
-                  <Sparkles className="w-3 h-3" />
+                  <span>{t("welcome.shuffle")}</span>
                 </button>
               </div>
             </div>
