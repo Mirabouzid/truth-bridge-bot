@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-import { Send, Image, Sparkles, Mic, Square, Loader2 } from "lucide-react";
+import { Send, Image, Sparkles, Mic, Square, Loader2, Shuffle } from "lucide-react";
 import salamAvatar from "@/assets/salam-avatar.png";
 import { Button } from "@/components/ui/button";
 import { SalamHeader } from "@/components/SalamHeader";
@@ -9,7 +9,7 @@ import { SalamResponseCards } from "@/components/SalamResponseCards";
 import { parseSalamResponse } from "@/lib/parseSalamResponse";
 import { toast } from "sonner";
 import { useAudioRecorder } from "@/hooks/useAudioRecorder";
-import { useLanguage, languageInstruction } from "@/contexts/LanguageContext";
+import { useLanguage, languageInstruction, samplePrompts, type SamplePrompt } from "@/contexts/LanguageContext";
 import imageCompression from "browser-image-compression";
 
 const MAX_IMAGE_MB = 8;
@@ -36,6 +36,7 @@ export default function SalamChat() {
   const recorder = useAudioRecorder();
   const { t, lang } = useLanguage();
   const abortRef = useRef<AbortController | null>(null);
+  const [sampleSeed, setSampleSeed] = useState(0);
 
   useEffect(() => {
     return () => {
@@ -242,11 +243,15 @@ export default function SalamChat() {
     }
   };
 
-  const suggestions: { key: string; sample: string }[] = [
-    { key: "welcome.analyze", sample: t("sample.analyze") },
-    { key: "welcome.factcheck", sample: t("sample.factcheck") },
-    { key: "welcome.empathy", sample: t("sample.empathy") },
-  ];
+  const suggestions = React.useMemo<SamplePrompt[]>(() => {
+    const pool = samplePrompts[lang] ?? samplePrompts.en;
+    const arr = [...pool];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr.slice(0, 3);
+  }, [lang, sampleSeed]);
 
   return (
     <div className="flex flex-col h-[100dvh] bg-background overflow-hidden relative">
@@ -273,17 +278,28 @@ export default function SalamChat() {
               <p className="text-muted-foreground max-w-md text-sm leading-relaxed">
                 {t("welcome.desc")}
               </p>
-              <div className="flex flex-wrap justify-center gap-2 mt-6 w-full max-w-lg">
-                {suggestions.map(({ key, sample }) => (
-                  <button
-                    key={key}
-                    onClick={() => setInput(sample)}
-                    className="px-3 py-2 glass neon-border rounded-xl text-xs text-foreground/80 hover:text-primary hover:border-primary/50 transition-all duration-300"
-                  >
-                    <Sparkles className="w-3 h-3 inline mr-1.5 text-primary" />
-                    {t(key)}
-                  </button>
-                ))}
+              <div className="flex flex-col items-center gap-3 mt-6 w-full max-w-lg">
+                <div className="flex flex-wrap justify-center gap-2 w-full">
+                  {suggestions.map((s, i) => (
+                    <button
+                      key={`${s.category}-${i}-${sampleSeed}`}
+                      onClick={() => setInput(s.text)}
+                      title={s.text}
+                      className="px-3 py-2 glass neon-border rounded-xl text-xs text-foreground/80 hover:text-primary hover:border-primary/50 transition-all duration-300 max-w-[18rem] truncate animate-fade-scale"
+                    >
+                      <span className="mr-1.5">{s.icon}</span>
+                      <span className="align-middle">{s.text}</span>
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => setSampleSeed((n) => n + 1)}
+                  className="text-xs text-muted-foreground hover:text-primary inline-flex items-center gap-1.5 transition-colors"
+                  aria-label="Shuffle suggestions"
+                >
+                  <Shuffle className="w-3 h-3" />
+                  <Sparkles className="w-3 h-3" />
+                </button>
               </div>
             </div>
           )}
